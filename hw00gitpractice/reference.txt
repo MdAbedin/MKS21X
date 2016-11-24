@@ -1,0 +1,5 @@
+add- makes git track the file
+commit- saves current files as a new version
+clone- makes a local directory for a repository and copies files over
+pull- updates local directory with files from repository on github
+push- uploads new offline commits to github
