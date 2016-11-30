@@ -41,11 +41,12 @@ public class CirculatingBook extends LibraryBook{
     }
 
     public String toString(){
-	if(currentHolder == null){
-	    return super.toString();
+	String s = super.toString();
+	
+	if(currentHolder != null){
+	    s += ", Current Holder-" + currentHolder + ", Due Date-" + dueDate;
 	}
-	else{
-	    return super.toString() + ", Current Holder-" + currentHolder + ", Due Date-" + dueDate;
-	}
+
+	return s;
     }
 }
