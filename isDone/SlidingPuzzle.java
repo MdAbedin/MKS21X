@@ -19,8 +19,7 @@ public class SlidingPuzzle{
 	for(int i = 0; i < side; i++){
 	    for(int j = 0; j < side; j++){
 		int index = ((int)(Math.random()*1000)) % temp.size();
-		values[i][j] = temp.get(index);
-		temp.remove(index);
+		values[i][j] = temp.remove(index);
 	    }
 	}
     }
