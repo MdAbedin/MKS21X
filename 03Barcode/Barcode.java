@@ -1,29 +1,23 @@
 public class Barcode implements Comparable<Barcode>{
     private String _zip;
-    private int _checkDigit;
 
     public Barcode(String zip){
 	try{
 	    if(zip.length() == 5){
 		_zip = zip;
-		_checkDigit = checkSum() % 10;
 	    }
 	    else{
-		throw new IllegalArgumentException();
+		throw new IllegalArgumentException("Zip code must be 5 numbers long");
 	    }
 	}
 	catch(NumberFormatException e){
-	    throw new IllegalArgumentException();
+	    throw new IllegalArgumentException("Zip code must consist of digits only");
 	}
     }
-
-    public Barcode clone(){
-	return new Barcode(_zip);
-    }
     
-    private int checkSum(){
+    public static int checkSum(String zip){
 	int sum = 0;
-	int num = Integer.parseInt(_zip);
+	int num = Integer.parseInt(zip);
 	
 	while(num != 0){
 	    sum += (num % 10);
@@ -34,76 +28,66 @@ public class Barcode implements Comparable<Barcode>{
     }
     
     public String toString(){
-	String code = _zip + _checkDigit + "  " + "|";
-	int ln = (_zip + _checkDigit).length();
-	
+        return _zip + checkSum + "  " + toCode(_zip);
+    }
+
+    public static String toCode(String zip){
+        String fullZip = zip + checkSum(zip);
+	int ln = fullZip.length();
+	String[] codes = {"||:::",":::||","::|:|","::||:",":|::|",":|:|:",":||::","|:::|","|::|:","|:|::"};
+	String ans = fullZip + "  " + "|";
+
 	for(int i = 0; i < ln; i++){
-	    switch((_zip + _checkDigit).charAt(i)){
-	    case '0': code += "||:::";
-		break;
-	    case '1': code += ":::||";
-		break;
-	    case '2': code += "::|:|";
-		break;
-	    case '3': code += "::||:";
-		break;
-	    case '4': code += ":|::|";
-		break;
-	    case '5': code += ":|:|:";
-		break;
-	    case '6': code += ":||::";
-		break;
-	    case '7': code += "|:::|";
-		break;
-	    case '8': code += "|::|:";
-		break;
-	    case '9': code += "|:|::";
-		break;
+	    ans += codes[Character.getNumericValue(fullZip.charAt(i))];
+	}
+
+	return ans + "|";
+    }
+    
+    public static String toZip(String code){
+	String zip = "";
+	
+	for(int i = 0; i < 5; i++){
+	    String digit = code.substring(i*5+1,i*5+6);
+	    if(digit.compareTo("||:::") == 0){
+		zip += "0";
+	    }
+	    else if(digit.compareTo(":::||") == 0){
+	        zip += "1";
+	    }
+	    else if(digit.compareTo("::|:|") == 0){
+	        zip += "2";
+	    }
+	    else if(digit.compareTo("::||:") == 0){
+	        zip += "3";
+	    }
+	    else if(digit.compareTo(":|::|") == 0){
+	        zip += "4";
+	    }
+	    else if(digit.compareTo(":|:|:") == 0){
+	        zip += "5";
+	    }
+	    else if(digit.compareTo(":||::") == 0){
+	        zip += "6";
+	    }
+	    else if(digit.compareTo("|:::|") == 0){
+	        zip += "7";
+	    }
+	    else if(digit.compareTo("|::|:") == 0){
+	        zip += "8";
+	    }
+	    else if(digit.compareTo("|:|::") == 0){
+	        zip += "9";
 	    }
 	}
 
-	return code + "|";
+	return zip;
     }
-    
+
     public int compareTo(Barcode other){
-	String code = other.toString().substring(9);
-	String otherZip = "";
-	
-	for(int i = 0; i < 6; i++){
-	    String digit = code.substring(i*5,i*5+5);
-	    if(digit.compareTo("||:::") == 0){
-		otherZip += "0";
-	    }
-	    else if(digit.compareTo(":::||") == 0){
-		otherZip += "1";
-	    }
-	    else if(digit.compareTo("::|:|") == 0){
-		otherZip += "2";
-	    }
-	    else if(digit.compareTo("::||:") == 0){
-		otherZip += "3";
-	    }
-	    else if(digit.compareTo(":|::|") == 0){
-		otherZip += "4";
-	    }
-	    else if(digit.compareTo(":|:|:") == 0){
-		otherZip += "5";
-	    }
-	    else if(digit.compareTo(":||::") == 0){
-		otherZip += "6";
-	    }
-	    else if(digit.compareTo("|:::|") == 0){
-		otherZip += "7";
-	    }
-	    else if(digit.compareTo("|::|:") == 0){
-		otherZip += "8";
-	    }
-	    else if(digit.compareTo("|:|::") == 0){
-		otherZip += "9";
-	    }
-	}
-	
-	return Integer.parseInt(_zip + _checkDigit) - Integer.parseInt(otherZip);
+	String fullZip = _zip + checkSum(_zip);
+	String otherFullZip = other._zip + checkSum(other._zip);
+	return Integer.parseInt(fullZip) - Integer.parseInt(otherFullZip);
     }
 
     public static void main(String args[]){
@@ -114,6 +98,7 @@ public class Barcode implements Comparable<Barcode>{
 	System.out.println(b.compareTo(b));
 	System.out.println(c.compareTo(b));
 
+	System.out.println(Barcode.toZip("|||:::|::|::|::|:|:|::::|||::|:|"));
 	//Barcode c = new Barcode("123456");
 	//Barcode d = new Barcode("1234");
 	//Barcode e = new Barcode("1234e");
