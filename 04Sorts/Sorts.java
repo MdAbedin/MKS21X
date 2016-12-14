@@ -17,10 +17,29 @@ public class Sorts{
 	    data[lowest] = old;
 	}
     }
+    
+    public static void insertionSort(int[] data){
+	int current;
+	int ln = data.length;
+	for(int i = 1; i < ln; i++){
+	    current = data[i];
+	    for(int j = i; j >= 0; j--){
+		if(j == 0){
+		    data[0] = current;
+		}
+		if(current < data[j-1]){
+		    data[j] = data[j-1];
+		}
+		else{
+		    data[j] = current;
+		}
+	    }
+	}
+    }
 
     public static void main(String[] a){
 	int[] b = {64, 25, 12, 22, 11};
-	Sorts.selectionSort(b);
+	Sorts.insertionSort(b);
 	for(int i = 0; i < b.length; i++){
 	    System.out.print(b[i] + ",");
 	}
