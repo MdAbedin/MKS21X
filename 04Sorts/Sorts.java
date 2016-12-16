@@ -37,9 +37,26 @@ public class Sorts{
 	}
     }
 
+    public static void bubbleSort(int[] data){
+	for(int i = data.length - 1; i > 0; i--){
+	    boolean swapped = false;
+	    for(int j = 0; j < i; j++){
+		if(data[j] > data[j+1]){
+		    int current = data[j];
+		    data[j] = data[j+1];
+		    data[j+1] = current;
+		    swapped = true;
+		}
+	    }
+	    if(!swapped){
+		return;
+	    }
+	}
+    }
+
     public static void main(String[] a){
 	int[] b = {64, 25, 12, 22, 11};
-	Sorts.insertionSort(b);
+	Sorts.bubbleSort(b);
 	for(int i = 0; i < b.length; i++){
 	    System.out.print(b[i] + ",");
 	}
